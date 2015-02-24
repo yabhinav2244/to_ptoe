@@ -152,14 +152,7 @@ function wptexturize($text) {
 	$no_texturize_tags_stack = array();
 	$no_texturize_shortcodes_stack = array();
 
-	// Look for shortcodes and HTML elements.
-	
-	$shortcode_regex =
-		  '\['          // Find start of shortcode.
-		. '[^\[\]<>]++' // Shortcodes do not contain other shortcodes. Possessive critical.
-		. '\]';         // Find end of shortcode.
-
-	$textarr = preg_split("/(<[^>]*>|$shortcode_regex)/s", $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+	$textarr = preg_split('/(<.*>|\[.*\])/Us', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
 
 	foreach ( $textarr as &$curl ) {
 		if ( empty( $curl ) ) {
@@ -170,7 +163,7 @@ function wptexturize($text) {
 		$first = $curl[0];
 		if ( '<' === $first ) {
 			_wptexturize_pushpop_element($curl, $no_texturize_tags_stack, $no_texturize_tags, '<', '>');
-		} elseif ( '[' === $first && 1 === preg_match( '/^' . $shortcode_regex . '$/', $curl ) ) {
+		} elseif ( '[' === $first ) {
 			_wptexturize_pushpop_element($curl, $no_texturize_shortcodes_stack, $no_texturize_shortcodes, '[', ']');
 		} elseif ( empty($no_texturize_shortcodes_stack) && empty($no_texturize_tags_stack) ) {
 
@@ -221,8 +214,6 @@ function _wptexturize_pushpop_element($text, &$stack, $disabled_elements, $openi
 
 			array_push($stack, $matches[1]);
 		}
-	} elseif ( 0 == count( $stack ) ) {
-		// Stack is empty. Just stop.
 	} else {
 		// Closing? Check $text+2 against disabled elements
 		$c = preg_quote($closing, '/');

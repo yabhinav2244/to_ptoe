@@ -651,14 +651,13 @@ function wp_print_media_templates() {
 				<div class="column-image">
 					<div class="image">
 						<img src="{{ data.model.url }}" draggable="false" />
-						<# if ( data.attachment ) { #>
+
+						<# if ( data.attachment && window.imageEdit ) { #>
 							<div class="actions">
-								<input type="button" class="edit-attachment button" value="<?php esc_attr_e( 'Edit Image' ); ?>" />
-								<# } #>
+								<input type="button" class="edit-attachment button" value="<?php esc_attr_e( 'Edit Original' ); ?>" />
 								<input type="button" class="replace-attachment button" value="<?php esc_attr_e( 'Replace' ); ?>" />
 							</div>
-						
-						
+						<# } #>
 					</div>
 				</div>
 				<div class="column-settings">
@@ -792,8 +791,7 @@ function wp_print_media_templates() {
 
 	<script type="text/html" id="tmpl-image-editor">
 		<div id="media-head-{{ data.id }}"></div>
-		<div id="image-editor-{{ data.id }}">
-		</div>
+		<div id="image-editor-{{ data.id }}"></div>
 	</script>
 
 	<script type="text/html" id="tmpl-audio-details">

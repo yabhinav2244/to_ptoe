@@ -1249,7 +1249,7 @@
 			menu: false,
 			toolbar: 'edit-image',
 			title: l10n.editImage,
-			content: 'edit-images'
+			content: 'edit-image'
 		},
 
 		activate: function() {
